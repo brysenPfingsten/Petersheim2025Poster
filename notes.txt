@@ -1,0 +1,6 @@
+Shrink grammar down
+	Probably new library to make multiple terminals fit on one line
+	Bottom left
+Shrink abstract
+	use bf and italics
+Table bottom right

@@ -92,58 +92,10 @@ Mechanized executable semantics are a valuable tool for implementers and users a
 We also present a visualization tool implemented through interactive JS in the browser with our miniKanren Redex model at its core. This visualizer allows users to input their own miniKanren programs as Racket source code; these programs are transpiled to the language of our model. At each step, users can easily see the evaluation context of their programs, trace goals both to and from the source code and the search tree visualization, and readily understand the history of the computation that led parts of the current state to arise. This not only enables better performance analysis and a unique, visual way of debugging but also allows novice miniKanren programmers to more readily understand the semantics and structure underlying the miniKanren search evolution.
 
   \end{block}
-
-  \begin{block}{A block containing a list}
-
-    Nam vulputate nunc felis, non condimentum lacus porta ultrices. Nullam sed
-    sagittis metus. Etiam consectetur gravida urna quis suscipit.
-
-    \begin{itemize}
-      \item \textbf{Mauris tempor} risus nulla, sed ornare
-      \item \textbf{Libero tincidunt} a duis congue vitae
-      \item \textbf{Dui ac pretium} morbi justo neque, ullamcorper
-    \end{itemize}
-
-    Eget augue porta, bibendum venenatis tortor.
-
-  \end{block}
-
-  \begin{alertblock}{A highlighted block}
-
-    This block catches your eye, so \textbf{important stuff} should probably go
-    here.
-
-    Curabitur eu libero vehicula, cursus est fringilla, luctus est. Morbi
-    consectetur mauris quam, at finibus elit auctor ac. Aliquam erat volutpat.
-    Aenean at nisl ut ex ullamcorper eleifend et eu augue. Aenean quis velit
-    tristique odio convallis ultrices a ac odio.
-
-    \begin{itemize}
-      \item \textbf{Fusce dapibus tellus} vel tellus semper finibus. In
-        consequat, nibh sed mattis luctus, augue diam fermentum lectus.
-      \item \textbf{In euismod erat metus} non ex. Vestibulum luctus augue in
-        mi condimentum, at sollicitudin lorem viverra.
-      \item \textbf{Suspendisse vulputate} mauris vel placerat consectetur.
-        Mauris semper, purus ac hendrerit molestie, elit mi dignissim odio, in
-        suscipit felis sapien vel ex.
-    \end{itemize}
-
-    Aenean tincidunt risus eros, at gravida lorem sagittis vel. Vestibulum ante
-    ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.
-
-  \end{alertblock}
-
-\end{column}
-
-\separatorcolumn
-
-\begin{column}{\colwidth}
-
+  
   \begin{block}{Grammar}
-    \small
-    \centering
-
-    \begin{bnf}
+    \begin{column}{0.45\colwidth}
+      \begin{bnf}
 $p$ ::=
 | \texttt{(prog $\Gamma$ $e$)} :
 ;;
@@ -153,78 +105,66 @@ $\Gamma$ ::=
 $d$ ::=
 | \texttt{($x_!$ ...)} :
 ;;
-$e$ ::=
-| \texttt{()} : Empty Tree
-| \texttt{($\top$ $\sigma$)} : Singleton Answer
-| $s$ : Search Tree
-| \texttt{(($\top$  $\sigma$) + \text{$e$)}} : Answer Stream
-;;
 $s$ ::=
-| \texttt{()} : Empty Tree
-| \texttt{($g$ $\sigma$)} : Goal with State
-| \texttt{($s \rightarrow s$)} : Right Tree Disjunction
-| \texttt{($s \leftarrow s$)} : Left Tree Disjunction
-| \texttt{(($\top$ $\sigma$) + $s$)} : Answer Stream
-| \texttt{($s$ $\times$ $g$)} : Tree Conjunction
-| \texttt{(proceed (($r$ $t$ ...) $\sigma$)} : Proceed
-| \texttt{(delay $s$)} : Delay
+| \texttt{()} 	\texttt{($g$ $\sigma$)} \texttt{($s \rightarrow s$)} \texttt{($s \leftarrow s$)} 
+| \texttt{(($\top$ $\sigma$) + $s$)} \texttt{($s$ $\times$ $g$)} 
+| \texttt{(proceed (($r$ $t$ ...) $\sigma$)} 
+| \texttt{(delay $s$)} 
 ;;
 $g$ ::= 
-| $\top$ : Trivial Success
-| \texttt{($t$ =?\text{ $t$})} : Unification
-| \texttt{($r$ $t ...$)} : Relation Call
-| \texttt{($g \vee g$)} : Goal Disjunction
-| \texttt{($g \wedge g$)} : Goal Conjunction
-| \texttt{($\exists$ $d$ $g$)} : Fresh Variable Declaration
+| $\top$ \texttt{($t$ =?\text{ $t$})} \texttt{($r$ $t ...$)}
+| \texttt{($g \vee g$)} \texttt{($g \wedge g$)} \texttt{($\exists$ $d$ $g$)}
 ;;
 $c$ ::=
-| \texttt{natural} : Logic Variables
-;;
-$o$ ::=
-| \texttt{boolean} : Booleans
-| \texttt{string} :  Strings
+| \textbf{natural}
 ;;
 $x$ ::=
-| (variable-prefix x) : Variables 
+| (variable-prefix x\text{$\colon$})
 ;;
 $r$ ::=
-| (variable-prefix r) : Relation Names
+| (variable-prefix r\text{$\colon$})
 ;;
 $t$ ::=
-| $c$ : 
-| $o$ : 
-| $x$ :
-| \texttt{empty} : Empty List
-| \texttt{($t$ \text{ $t$})} : Non-Empty List
-;;
-$sub$ ::=
-| \texttt{(($c$ $t$) ...)} : Substitution
-;;
-\texttt{$maybe$-$sub$} ::=
-| $sub$ :
-| $\#f$ :
+| $c$ \textbf{boolean} \textbf{string} \textbf{symbol}
+| $x$ \texttt{empty} \texttt{($t$ $\colon$\text{ $t$})}
 ;;
 $\sigma$  ::=
-| \texttt{(state $sub$ $c$)} : State
+| \texttt{(state $sub$ $c$)}
 ;;
-$E\Gamma$ ::=
-| \texttt{(prog $\Gamma$ hole)} : Program
+$sub$ ::=
+| \texttt{(($c$ $t$) ...)}
 ;;
-$Ev$ ::=
-| \texttt{hole} : Answer Stream
-| \texttt{(($\top$ $\sigma$) + $Ev$)} :
-;;
-$Es$ ::=
-| \texttt{hole} : Search Tree
-| \texttt{($Es \leftarrow s$)} :
-| \texttt{($s \rightarrow Es$)} :
-| \texttt{($Es \times g$)} :
-;;
-$Ex$ ::=
-| \texttt{$E\Gamma$$\llbracket$$Ev$$\llbracket$$Es$$\llbracket$hole$\rrbracket$$\rrbracket$$\rrbracket$} : Main
-\end{bnf}
+      \end{bnf}
+    \end{column}
+
+ %   \begin{bnf}
+
+%$E\Gamma$ ::=
+%| \texttt{(prog $\Gamma$ hole)}
+%;;
+%$Ev$ ::=
+%| \texttt{hole}
+%| \texttt{(($\top$ $\sigma$) + $Ev$)}
+%;;
+%$Es$ ::=
+%| \texttt{hole}
+%| \texttt{($Es \leftarrow s$)}
+%| \texttt{($s \rightarrow Es$)}
+%| \texttt{($Es \times g$)}
+%;;
+%$Ex$ ::=
+%| \texttt{$E\Gamma$$\llbracket$$Ev$$\llbracket$$Es$$\llbracket$hole$\rrbracket$$\rrbracket$$\rrbracket$}
+%\end{bnf}
 
   \end{block}
+
+\end{column}
+
+\separatorcolumn
+
+\begin{column}{\colwidth}
+
+  
 
   \begin{block}{Fusce aliquam magna velit}
 
