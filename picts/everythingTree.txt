@@ -1,0 +1,21 @@
+(redex-match?
+ L
+ p
+ (term (prog ()
+             ((⊤ (state () 0 ()))
+              +
+              ((⊤ (state () 0 ()))
+               +
+               (((proceed ((r:exampleo (sym "dog") (sym "fish") "r2") (state () 0 ())))
+                 +->
+                 ((∃ (x:a x:b)
+                      (((x:a =? "def" "u4")
+                        ∨
+                        (r:exampleo x:b "ghi" "r3") "d1")
+                       ∧
+                       ((nat 1) =? (nat 2) "u3") "c1") "f1")
+                   (state  () 0 ()))) 
+                  <-+ 
+                  ((delay (("abc" =? "abc" "u1") (state () 0 ())))
+                   × 
+                   (r:exampleo "lorem" "ipusm" "r1"))))))))

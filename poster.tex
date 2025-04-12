@@ -97,9 +97,16 @@
 
   \begin{block}{Abstract}
 
-Mechanized executable semantics are a valuable tool for implementers and users alike to better understand their programs' behavior. The need is particulary acute in the context of novel logic programming languages with complex search strategies. Few such tools exist for logic-based programming languages however, and existing work only models languages' search behavior at a somewhat coarse-grained level. In this work, we present the first small-step semantics for a logic language that models interleaving search at the level of individual goal execution. The model is implemented in PLT Redex, a Racket-based semantics workbench, and allows users to step through the language's execution at a sub-interleave level.
+Mechanized executable semantics are a valuable tool for implementers and users alike to better understand their programs' behavior. 
+The need is particulary acute in the context of novel logic programming languages with complex search strategies. 
+Few such tools exist for logic-based programming languages however, and existing work only models languages' search behavior at a somewhat coarse-grained level.
+\textbf{In this work, we present the first small-step semantics for a logic language that models interleaving search at the level of individual goal execution.}
+ The model is implemented in PLT Redex, a Racket-based semantics workbench, and allows users to step through the language's execution at a sub-interleave level.
 
-We also present a visualization tool implemented through interactive JS in the browser with our miniKanren Redex model at its core. This visualizer allows users to input their own miniKanren programs as Racket source code; these programs are transpiled to the language of our model. At each step, users can easily see the evaluation context of their programs, trace goals both to and from the source code and the search tree visualization, and readily understand the history of the computation that led parts of the current state to arise. This not only enables better performance analysis and a unique, visual way of debugging but also allows novice miniKanren programmers to more readily understand the semantics and structure underlying the miniKanren search evolution.
+\textbf{We also present a visualization tool implemented through interactive JS in the browser with our miniKanren Redex model at its core.}
+This visualizer allows users to input their own miniKanren programs as Racket source code; these programs are transpiled to the language of our model. 
+At each step, users can easily see the evaluation context of their programs, trace goals both to and from the source code and the search tree visualization, and readily understand the history of the computation that led parts of the current state to arise. 
+This not only enables better performance analysis and a unique, visual way of debugging but also allows novice miniKanren programmers to more readily understand the semantics and structure underlying the miniKanren search evolution.
 
   \end{block}
   
@@ -107,7 +114,7 @@ We also present a visualization tool implemented through interactive JS in the b
 % Grammar
 % ====================
   
-\begin{block}{Grammar}
+\begin{alertblock}{Grammar}
 	\centering
     \begin{bnf}
 $p$ ::=
@@ -149,7 +156,7 @@ $sub$ ::=
 | \texttt{(($c$ $t$) ...)}
 ;;
     \end{bnf}
-\end{block}
+\end{alertblock}
 
 
  %   \begin{bnf}
@@ -182,13 +189,9 @@ $sub$ ::=
 
   
 
-  \begin{block}{Fusce aliquam magna velit}
+  \begin{block}{Interleaving}
 
-    Et rutrum ex euismod vel. Pellentesque ultricies, velit in fermentum
-    vestibulum, lectus nisi pretium nibh, sit amet aliquam lectus augue vel
-    velit. Suspendisse rhoncus massa porttitor augue feugiat molestie. Sed
-    molestie ut orci nec malesuada. Sed ultricies feugiat est fringilla
-    posuere.
+At the core of miniKanren search is the idea of the interleave. In order to ensure a more fair search, each relation call is delayed until it reaches the top of our evaluation context. Traditionally, this operation is done by flipping the tree such that the newly delayed relation call must wait for the other side of the tree to complete its computation or encounter another relation call to be invoked. Visually, however, this transformation is confusing as it requires the programmer to recalibrate themselves with the new shape of the tree. As such, we implement a \textit{railway model} with directed tree disjunctions that preserves the shape of the tree while allowing for interleave behavior.
 
 \vspace{1em}
 
@@ -213,7 +216,7 @@ $sub$ ::=
     \end{figure}
    \end{center}
 \end{column}
-\begin{column}{0.6\textwidth}  %%<--- here
+\begin{column}{0.6\textwidth} 
 \justify
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vel dapibus erat. Morbi quis leo congue, lobortis augue bibendum, malesuada neque. Duis ullamcorper quis orci sed consequat. Nam pellentesque ullamcorper tempor. Duis eget nulla blandit, vulputate orci vitae, ullamcorper ligula. Mauris a urna ac massa dignissim scelerisque sed et augue. Donec eget urna vitae neque elementum pellentesque et eget enim. Praesent a fermentum nibh. Nullam eu nibh neque. 
 \end{column}
@@ -222,40 +225,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vel dapibus era
 
   \end{block}
 
-  \begin{block}{Nam cursus consequat egestas}
 
-    Nulla eget sem quam. Ut aliquam volutpat nisi vestibulum convallis. Nunc a
-    lectus et eros facilisis hendrerit eu non urna. Interdum et malesuada fames
-    ac ante \textit{ipsum primis} in faucibus. Etiam sit amet velit eget sem
-    euismod tristique. Praesent enim erat, porta vel mattis sed, pharetra sed
-    ipsum. Morbi commodo condimentum massa, \textit{tempus venenatis} massa
-    hendrerit quis. Maecenas sed porta est. Praesent mollis interdum lectus,
-    sit amet sollicitudin risus tincidunt non.
-
-    Etiam sit amet tempus lorem, aliquet condimentum velit. Donec et nibh
-    consequat, sagittis ex eget, dictum orci. Etiam quis semper ante. Ut eu
-    mauris purus. Proin nec consectetur ligula. Mauris pretium molestie
-    ullamcorper. Integer nisi neque, aliquet et odio non, sagittis porta justo.
-
-    \begin{itemize}
-      \item \textbf{Sed consequat} id ante vel efficitur. Praesent congue massa
-        sed est scelerisque, elementum mollis augue iaculis.
-        \begin{itemize}
-          \item In sed est finibus, vulputate
-            nunc gravida, pulvinar lorem. In maximus nunc dolor, sed auctor eros
-            porttitor quis.
-          \item Fusce ornare dignissim nisi. Nam sit amet risus vel lacus
-            tempor tincidunt eu a arcu.
-          \item Donec rhoncus vestibulum erat, quis aliquam leo
-            gravida egestas.
-        \end{itemize}
-      \item \textbf{Sed luctus, elit sit amet} dictum maximus, diam dolor
-        faucibus purus, sed lobortis justo erat id turpis.
-      \item \textbf{Pellentesque facilisis dolor in leo} bibendum congue.
-        Maecenas congue finibus justo, vitae eleifend urna facilisis at.
-    \end{itemize}
-
-  \end{block}
 
 \end{column}
 
