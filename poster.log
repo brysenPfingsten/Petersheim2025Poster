@@ -1,0 +1,15 @@
+This is LuaTeX, Version 1.17.0 (TeX Live 2023/Debian)  (format=luatex 2025.3.23)  11 APR 2025 18:39
+ restricted system commands enabled.
+**paper.tex
+(./poster.tex
+! Undefined control sequence.
+l.6 \documentclass
+                [final]{beamer}
+? X
+
+warning  (pdf backend): no pages of output.
+
+PDF statistics: 0 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 131072)
+ 1 words of extra memory for PDF output out of 10000 (max. 100000000)
+
