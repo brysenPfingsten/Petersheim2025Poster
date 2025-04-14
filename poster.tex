@@ -181,39 +181,44 @@ $sub$ ::=
 \end{alertblock}
 
 
- %   \begin{bnf}
-
-%$E\Gamma$ ::=
-%| \texttt{(prog $\Gamma$ hole)}
-%;;
-%$Ev$ ::=
-%| \texttt{hole}
-%| \texttt{(($\top$ $\sigma$) + $Ev$)}
-%;;
-%$Es$ ::=
-%| \texttt{hole}
-%| \texttt{($Es \leftarrow s$)}
-%| \texttt{($s \rightarrow Es$)}
-%| \texttt{($Es \times g$)}
-%;;
-%$Ex$ ::=
-%| \texttt{$E\Gamma$$\llbracket$$Ev$$\llbracket$$Es$$\llbracket$hole$\rrbracket$$\rrbracket$$\rrbracket$}
-%\end{bnf}
-
-% ====================
-% Interleave
-% ====================
 \end{column}
 
 \separatorcolumn
+% ==================================
+% Evaluation Contexts and Interleave
+% ==================================
 
 \begin{column}{\colwidth}
 
+% ===================
+% Evaluation Contexts
+% ===================
+\begin{block}{Evaluation Contexts}
+\begin{center}
+\vspace{-1cm}
+\begin{bnf}
+$E\Gamma$ ::=
+| \texttt{(prog $\Gamma$ hole)}
+;;
+$Ev$ ::=
+| \texttt{hole} $\vert$ \texttt{(($\top$ $\sigma$) + $Ev$)}
+;;
+$Es$ ::=
+| \texttt{hole} $\vert$ \texttt{($Es \leftarrow s$)} $\vert$ \texttt{($s \rightarrow Es$)} $\vert$ \texttt{($Es \times g$)}
+;;
+$Ex$ ::=
+| \texttt{$E\Gamma$$\llbracket$$Ev$$\llbracket$$Es$$\llbracket$hole$\rrbracket$$\rrbracket$$\rrbracket$}
+\end{bnf}
+\vspace{-1cm}
+\end{center}
+\end{block}
   
-
+% ==========
+% Interleave
+% ==========
   \begin{block}{Interleaving}
 
-At the core of miniKanren search is the idea of the interleave. In order to ensure a more fair search, each relation call is delayed until it reaches the top of our evaluation context. Traditionally, this operation is done by flipping the tree such that the newly delayed relation call must wait for the other side of the tree to complete its computation or encounter another relation call to be invoked. Visually, however, this transformation is confusing as it requires the programmer to recalibrate themselves with the new shape of the tree. As such, we implement a \textit{railway model} with directed disjunctions that preserves the shape of the tree while allowing for interleave behavior.
+At the core of miniKanren's search is the interleave, which ensures fair evaluation by delaying each relation call until it reaches the top of the tree evaluation context. To preserve the visual shape of the tree while enabling this behavior, we implement a \textit{railway model} with directed disjunctions.
 
 %%% Flow Chart %%%
 \centering
@@ -286,7 +291,7 @@ At the core of miniKanren search is the idea of the interleave. In order to ensu
 % ===============
 % Reduction Steps
 % ===============
-  \begin{exampleblock}{Reduction Steps}
+  \begin{exampleblock}{Select Reduction Steps}
   
 % =====================================================
 \heading{Distribute State Across Goals to Create Trees}
@@ -304,7 +309,7 @@ At the core of miniKanren search is the idea of the interleave. In order to ensu
 % =====================
 \heading{Railway Model}
 % =====================
-Note: We show here those reduction steps dealing with left-facing disjunctions and omit those dealing with right-facing disjunctions.
+We show here those reduction steps dealing with left-facing disjunctions and omit those dealing with right-facing disjunctions.
 \begin{center}
 \vspace{-1cm}
 \redstep
