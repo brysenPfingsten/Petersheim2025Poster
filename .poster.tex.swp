@@ -25,9 +25,13 @@
 \usepackage{simplebnf}
 \usepackage{stmaryrd}
 \usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools} 
+\usepackage{tabularx} 
 
 % ====================
-% Lengths
+% Lengths and Commands
 % ====================
 
 % If you have N columns, choose \sepwidth and \colwidth such that
@@ -39,6 +43,19 @@
 
 \newcommand{\separatorcolumn}{\begin{column}{\sepwidth}\end{column}}
 
+\newlength{\redwidth}
+\setlength{\redwidth}{\colwidth}
+
+\newcommand{\redstep}[2]{%
+  \noindent
+  \makebox[\redwidth][c]{%
+    \parbox[b]{0.5\redwidth}{\raggedleft\texttt{#1}}%
+    \hfill
+    \parbox[b]{0.10\redwidth}{\centering$\longrightarrow$}%
+    \hfill
+    \parbox[b]{0.5\redwidth}{\raggedright\texttt{#2}}%
+  }%
+}
 % ====================
 % Title
 % ====================
@@ -259,37 +276,72 @@ At the core of miniKanren search is the idea of the interleave. In order to ensu
 \end{figure}
   \end{block}
 
-
-
 \end{column}
 
 \separatorcolumn
-
+% ================================
+% Reduction Steps and Architecture
+% ================================
 \begin{column}{\colwidth}
+% ===============
+% Reduction Steps
+% ===============
+  \begin{exampleblock}{Reduction Steps}
+  
+% =====================================================
+\heading{Distribute State Across Goals to Create Trees}
+% =====================================================
 
-  \begin{exampleblock}{A highlighted block containing some math}
+\redstep
+  {Ex$\llbracket$(($g_1$ $\vee$ $g_2$) $\sigma$)$\rrbracket$}
+  {Ex$\llbracket$(($g_1$ $\sigma$) $\leftarrow$ ($g_2$ $\sigma$))$\rrbracket$}
 
-    A different kind of highlighted block.
 
+\redstep
+  {Ex$\llbracket$(($g_1$ $\wedge$ $g_2$) $\sigma$)$\rrbracket$}
+  {Ex$\llbracket$(($g_1$ $\sigma$) $\times$ $g_2$)$\rrbracket$}
 
+% =====================
+\heading{Railway Model}
+% =====================
+Note: We show here those reduction steps dealing with left-facing disjunctions and omit those dealing with right-facing disjunctions.
+\begin{center}
+\vspace{-1cm}
+\redstep
+  {Ex$\llbracket$((delay $s_1$) $\leftarrow$ $s_2$)$\rrbracket$}
+  {Ex$\llbracket$(delay ($s_1$ $\rightarrow$ $s_2$))$\rrbracket$}
 
-    Interdum et malesuada fames $\{1, 4, 9, \ldots\}$ ac ante ipsum primis in
-    faucibus. Cras eleifend dolor eu nulla suscipit suscipit. Sed lobortis non
-    felis id vulputate.
+\redstep
+  {Ex$\llbracket$(($\top$ $\sigma$) $\leftarrow$ $s$)$\rrbracket$}
+  {Ex$\llbracket$(($\top$ $\sigma$) + $s$)$\rrbracket$}
+  
+\redstep
+  {Ex$\llbracket$(() $\leftarrow$ $s$)$\rrbracket$}
+  {Ex$\llbracket s \rrbracket$}
 
-    \heading{A heading inside a block}
+\redstep
+  {Ex$\llbracket$((($\top$ $\sigma$) $\leftarrow$ $s_1$) $\leftarrow$ $s_2$)$\rrbracket$}
+  {Ex$\llbracket$(($\top$ $\sigma$) $\leftarrow$ ($s_1$ $\leftarrow$ $s_2$))$\rrbracket$}
+  
+\redstep
+  {Ex$\llbracket$(($s_1$ $\rightarrow$ ($\top$ $\sigma$)) $\leftarrow$ $s_2$)$\rrbracket$}
+  {Ex$\llbracket$(($s_1$ $\rightarrow$ $s_2$) $\rightarrow$ ($\top$ $\sigma$))$\rrbracket$}
+\end{center}
 
-    Praesent consectetur mi $x^2 + y^2$ metus, nec vestibulum justo viverra
-    nec. Proin eget nulla pretium, egestas magna aliquam, mollis neque. Vivamus
-    dictum $\mathbf{u}^\intercal\mathbf{v}$ sagittis odio, vel porta erat
-    congue sed. Maecenas ut dolor quis arcu auctor porttitor.
+% ===========================
+\heading{Delays and Proceeds}
+% ===========================
+\begin{center}
+\vspace{-1cm}
+\redstep
+  {\parbox[t]{0.45\redwidth}{\raggedleft\texttt{$Ex$$\llbracket$(($r_1$ $t$ ...) $\sigma$)$\rrbracket$}}}
+  {\parbox[t]{0.45\redwidth}{\raggedright\texttt{$Ex$$\llbracket$(delay (proceed (($r_1$ $t$ ...) $\sigma$)))$\rrbracket$}}}
 
-    \heading{Another heading inside a block}
+\redstep
+  {(prog $\Gamma$ $Ev$$\llbracket$(delay $s$)$\rrbracket$}
+  {(prog $\Gamma$ $Ev$$\llbracket$$s$$\rrbracket$)} 
+\end{center}
 
-    Sed augue erat, scelerisque a purus ultricies, placerat porttitor neque.
-    Donec $P(y \mid x)$ fermentum consectetur $\nabla_x P(y \mid x)$ sapien
-    sagittis egestas. Duis eget leo euismod nunc viverra imperdiet nec id
-    justo.
 
   \end{exampleblock}
 
