@@ -29,6 +29,9 @@
 \usepackage{amssymb}
 \usepackage{mathtools} 
 \usepackage{tabularx} 
+\usepackage{xcolor}
+\usepackage[normalem]{ulem}
+
 
 % ====================
 % Lengths and Commands
@@ -196,20 +199,24 @@ $sub$ ::=
 \begin{block}{Evaluation Contexts}
 \begin{center}
 \vspace{-1cm}
+\begin{figure}[htbp]
 \begin{bnf}
-$E\Gamma$ ::=
+$E\Gamma$ : Program ::= 
 | \texttt{(prog $\Gamma$ hole)}
 ;;
-$Ev$ ::=
+$Ev$ : Answer Stream ::= 
 | \texttt{hole} $\vert$ \texttt{(($\top$ $\sigma$) + $Ev$)}
 ;;
-$Es$ ::=
+$Es$ : Search Tree ::= 
 | \texttt{hole} $\vert$ \texttt{($Es \leftarrow s$)} $\vert$ \texttt{($s \rightarrow Es$)} $\vert$ \texttt{($Es \times g$)}
 ;;
-$Ex$ ::=
+$Ex$ : Composition ::= 
 | \texttt{$E\Gamma$$\llbracket$$Ev$$\llbracket$$Es$$\llbracket$hole$\rrbracket$$\rrbracket$$\rrbracket$}
 \end{bnf}
-\vspace{-1cm}
+\caption{Evaluation contexts of our language.}
+\label{fig:eval-contexts}
+\end{figure}
+\vspace{-1.5cm}
 \end{center}
 \end{block}
   
@@ -223,6 +230,7 @@ At the core of miniKanren's search is the interleave, which ensures fair evaluat
 %%% Flow Chart %%%
 \centering
 \begin{figure}[htbp]
+\vspace{-1cm}
 \begin{tikzpicture}[
   node distance=2cm and 10cm,
   imagebox/.style={inner sep=0, anchor=center},
@@ -336,6 +344,8 @@ We show here those reduction steps dealing with left-facing disjunctions and omi
 % ===========================
 \heading{Delays and Proceeds}
 % ===========================
+Relation calls are wrapped with a proceed tag and then a delay tag. 
+Delays at the top level are released and the next time the delayed relation call is encountered it will be expanded.
 \begin{center}
 \vspace{-1cm}
 \redstep
@@ -346,53 +356,25 @@ We show here those reduction steps dealing with left-facing disjunctions and omi
   {(prog $\Gamma$ $Ev$$\llbracket$(delay $s$)$\rrbracket$}
   {(prog $\Gamma$ $Ev$$\llbracket$$s$$\rrbracket$)} 
 \end{center}
+\end{exampleblock}
 
+% ============
+% Architecture
+% ============
 
-  \end{exampleblock}
+\begin{block}{Architecture}
+Our visualizer is implemented as a web app using D3 to render our trees. 
+Our API is responsible for fulfilling the requests of the user by either sending a cached state if it exists or stepping the program and sending back the corresponding JSON. 
+\\ 
+You can try it out now at \textcolor{blue}{minikanrenredex-prod.shu.edu}.
 
-  \begin{block}{Nullam vel erat at velit convallis laoreet}
+\begin{figure}[htbp]
+	\includegraphics[height=7.8cm]{picts/architecture.pdf}
+\caption{The architecture of our application.}
+\label{fig:architecture}
+\end{figure}
 
-    Class aptent taciti sociosqu ad litora torquent per conubia nostra, per
-    inceptos himenaeos. Phasellus libero enim, gravida sed erat sit amet,
-    scelerisque congue diam. Fusce dapibus dui ut augue pulvinar iaculis.
-
-    \begin{table}
-      \centering
-      \begin{tabular}{l r r c}
-        \toprule
-        \textbf{First column} & \textbf{Second column} & \textbf{Third column} & \textbf{Fourth} \\
-        \midrule
-        Foo & 13.37 & 384,394 & $\alpha$ \\
-        Bar & 2.17 & 1,392 & $\beta$ \\
-        Baz & 3.14 & 83,742 & $\delta$ \\
-        Qux & 7.59 & 974 & $\gamma$ \\
-        \bottomrule
-      \end{tabular}
-      \caption{A table caption.}
-    \end{table}
-
-    Donec quis posuere ligula. Nunc feugiat elit a mi malesuada consequat. Sed
-    imperdiet augue ac nibh aliquet tristique. Aenean eu tortor vulputate,
-    eleifend lorem in, dictum urna. Proin auctor ante in augue tincidunt
-    tempor. Proin pellentesque vulputate odio, ac gravida nulla posuere
-    efficitur. Aenean at velit vel dolor blandit molestie. Mauris laoreet
-    commodo quam, non luctus nibh ullamcorper in. Class aptent taciti sociosqu
-    ad litora torquent per conubia nostra, per inceptos himenaeos.
-
-    Nulla varius finibus volutpat. Mauris molestie lorem tincidunt, iaculis
-    libero at, gravida ante. Phasellus at felis eu neque suscipit suscipit.
-    Integer ullamcorper, dui nec pretium ornare, urna dolor consequat libero,
-    in feugiat elit lorem euismod lacus. Pellentesque sit amet dolor mollis,
-    auctor urna non, tempus sem.
-
-  \end{block}
-
-  \begin{block}{References}
-
-    \nocite{*}
-    \footnotesize{\bibliographystyle{plainnat}\bibliography{poster}}
-
-  \end{block}
+\end{block}
 
 \end{column}
 
